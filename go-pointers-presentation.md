@@ -2,7 +2,7 @@
 
 ---
 
-## The Basics: What is a Pointer?
+# The Basics: What is a Pointer?
 
 - A pointer holds the memory address of a value, not the value itself.
 - `&` gets the address of a variable (the "location of...").
@@ -21,7 +21,7 @@
 
 ---
 
-## Pointing Deeper
+# Pointing Deeper
 
 - **Under the hood**
   - On 64-bit systems, a pointer is always 8 bytes in size, regardless of the type it points to.
@@ -49,7 +49,7 @@
 
 ---
 
-## Passing Pointers: Mutability & Efficiency
+# Passing Pointers: Mutability & Efficiency
 
 - Pass a pointer to allow a function to modify the original value.
 - Avoids global variables and unnecessary memory allocation.
@@ -81,7 +81,7 @@
 
 ---
 
-## Returning Pointers & Common Gotchas
+# Returning Pointers & Common Gotchas
 
 - Returning a pointer can signal "no value" (`nil`), be careful:
   - Dereferencing a `nil` pointer causes a panic.
@@ -118,7 +118,7 @@
 
 ---
 
-## Passing vs Returning Pointers: What's Idiomatic?
+# Passing vs Returning Pointers: What's Idiomatic?
 
 - In Go, prefer **passing pointers into functions**:
  ### ✅ Reasons to Pass a Pointer Into a Function
@@ -159,7 +159,7 @@
 
 ---
 
-## Pointers vs References: Go, Java, JavaScript, and Python
+# Pointers vs References: Go, Java, JavaScript, and Python
 
 - **Go:** Explicit pointers for any type (except maps, slices, channels, interfaces, functions).
   - Must use `&` and `*` to work with addresses and values.
@@ -181,7 +181,7 @@
 
 ---
 
-## Summary & Best Practices
+# Summary & Best Practices
 
 - Use pointers to update state or optimize memory usage, especially with large structs or when sharing data between functions or goroutines.
 - Prefer passing pointers to functions rather than returning them, unless you need to signal `nil` or follow an established API convention.
@@ -201,7 +201,7 @@
 
 ---
 
-## Further Reading
+# Further Reading
 
 - [Effective Go: Pointers vs. Values](https://go.dev/doc/effective_go#pointers_vs_values)
 - [Go Blog: Go Slices: usage and internals](https://blog.golang.org/slices-intro)
