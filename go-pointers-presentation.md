@@ -129,6 +129,15 @@
 | Avoid copying large structs | Improves performance by avoiding expensive value copies             |
 | Shared ownership            | Enables safe, coordinated access across goroutines or components    |
 
+  ### ✅ Reasons to Return a Value
+
+| Reason             | Why                                                         |
+|--------------------|--------------------------------------------------------------|
+| Small struct        | Copying is cheaper than pointer indirection                |
+| Immutability        | Prevents accidental changes to the object                  |
+| Simple usage        | Cleaner API, no need for dereferencing                     |
+| Safe lifetime       | No issues of aliasing or unintended sharing                |
+
   ### ✅ Reasons to Return a Pointer
 
 | Reason             | Why                                                         |
@@ -138,15 +147,6 @@
 | Mutation needed     | Caller can modify the struct                                |
 | Shared ownership    | Struct may be reused or mutated by multiple parts           |
 | Consistency         | API conventions often use `*Type` consistently              |
-
-  ### ✅ Reasons to Return a Value
-
-| Reason             | Why                                                         |
-|--------------------|--------------------------------------------------------------|
-| Small struct        | Copying is cheaper than pointer indirection                |
-| Immutability        | Prevents accidental changes to the object                  |
-| Simple usage        | Cleaner API, no need for dereferencing                     |
-| Safe lifetime       | No issues of aliasing or unintended sharing                |
 
 **Real-world examples:**
 - http.Request is passed as a *http.Request — because it's big and often mutated.
