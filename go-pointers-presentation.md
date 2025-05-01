@@ -17,16 +17,18 @@
 - Why use pointers?
   - Avoid copying large structs
   - Enable functions to modify values
-  - Signal errors with `nil`
-- Note:
+  - Signal errors with `nil` (I feel there are better/simpler ways to error catch)
+
+---
+
+## Pointing Deeper
+
+- **Under the hood**
   - On 64-bit systems, a pointer is always 8 bytes in size, regardless of the type it points to.
   - Some Go types (maps, slices, channels, interfaces, and functions) already behave like pointers:
     - When you pass these types to functions, the underlying data is shared, not copied.
     - You do not need to use explicit pointers with these types to share or modify their contents.
-
----
-
-## Go-ing Deeper
+  - In Go, a pointer can itself have a pointer (e.g., `**int`), allowing multiple levels of indirection if needed.
 
 - **Zero Values and nil**
   - In Go, an uninitialized pointer has the zero value `nil`.
@@ -68,7 +70,6 @@
       fmt.Println("In main - x after modify:", x)
   }
   ```
-  - Note: In Go, a pointer can itself have a pointer (e.g., `**int`), allowing multiple levels of indirection if needed.
 - Use cases:
   - Reducing memory usage when passing large arrays or buffers
     - Avoids full copy; improves performance.
@@ -76,14 +77,13 @@
     - Allows shared control of resource lifecycle.
   - Sharing state between goroutines safely (with synchronization)
     - Enables coordinated access to shared memory.
-  - Implementing linked data structures (e.g., linked lists, trees)
-    - Connects nodes dynamically.
+  - Implementing custom data structures (e.g., trees, graphs) – Pointers enable dynamic linking between elements when slices aren't sufficient.
 
 ---
 
 ## Returning Pointers & Common Gotchas
 
-- Returning a pointer can signal "no value" (`nil`), but be careful:
+- Returning a pointer can signal "no value" (`nil`), be careful:
   - Dereferencing a `nil` pointer causes a panic.
 - Example:
   ```go
@@ -112,52 +112,50 @@
       }
   }
   ```
-- Returning a pointer to a local variable is safe in Go due to **escape analysis**, which promotes the variable to the heap if needed. But this can be confusing to newcomers.
-- Note: If an existing API or application already returns pointers, it's best to follow that convention for consistency.
+- Most languages teach: "Don’t return a local variable’s address!" (and I find it more readable too)
+- Returning a pointer to a local variable is safe in Go due to **escape analysis**, which promotes the variable to the heap if needed.
+  - Note: I typically pass a pointer for mutability return a value instead of returning a pointer.  If an existing API or application already returns pointers, it's best to follow that convention for consistency.
 
 ---
 
 ## Passing vs Returning Pointers: What's Idiomatic?
 
-- In Go, prefer **passing pointers into functions** when you:
-  - Want to mutate the value
-  - Want to avoid copying large structs
-  - Want to share ownership across goroutines safely
-- Return pointers from functions when you:
-  - Are **creating and initializing** a new object
-  - Need to signal optionality (`nil`)
-  - Want the caller to manage the object lifecycle
-- Avoid returning pointers to primitives like `*int`, `*bool`, etc., unless required.
-- Returning pointers to local variables is **safe in Go** due to escape analysis, but it may confuse newcomers.
+- In Go, prefer **passing pointers into functions**:
+ ### ✅ Reasons to Pass a Pointer Into a Function
+
+| Reason                      | Why                                                                 |
+|-----------------------------|----------------------------------------------------------------------|
+| Mutate the value            | Allows the function to modify the original object                   |
+| Avoid copying large structs | Improves performance by avoiding expensive value copies             |
+| Shared ownership            | Enables safe, coordinated access across goroutines or components    |
+
+  ### ✅ Reasons to Return a Pointer
+
+| Reason             | Why                                                         |
+|--------------------|--------------------------------------------------------------|
+| Large struct        | Avoids copying big data structures                          |
+| Optional result     | You can return `nil` to mean “nothing”                      |
+| Mutation needed     | Caller can modify the struct                                |
+| Shared ownership    | Struct may be reused or mutated by multiple parts           |
+| Consistency         | API conventions often use `*Type` consistently              |
+
+  ### ✅ Reasons to Return a Value
+
+| Reason             | Why                                                         |
+|--------------------|--------------------------------------------------------------|
+| Small struct        | Copying is cheaper than pointer indirection                |
+| Immutability        | Prevents accidental changes to the object                  |
+| Simple usage        | Cleaner API, no need for dereferencing                     |
+| Safe lifetime       | No issues of aliasing or unintended sharing                |
+
+**Real-world examples:**
+- http.Request is passed as a *http.Request — because it's big and often mutated.
+- time.Time is returned as a value — it's small, immutable, and safe to copy.
+
+**Advanced:**
+- Avoid returning pointers to primitives like `*int`, `*bool`, etc., unless required (no performance gain and adds complexity).
+- Returning pointers to local variables is **safe in Go** due to escape analysis, but it may add unnecessary complexity.
 - ⚠️ Avoid returning pointers just to “reduce allocations” unless performance profiling supports it.
-
-**Idiomatic summary:**
-
-```go
-// Pass pointer to mutate
-func Update(p *User) {
-    p.Name = "Jake"
-}
-
-func main() {
-    u := User{Name: "Alice"}
-    fmt.Println("Before Update:", u.Name) // Alice
-    Update(&u)
-    fmt.Println("After Update:", u.Name)  // Jake
-}
-
-// Return pointer for ownership or reuse
-func NewUser(name string) *User {
-    return &User{Name: name}
-}
-
-func main() {
-    userPtr := NewUser("Bob")
-    fmt.Println("New user name:", userPtr.Name) // Bob
-    userPtr.Name = "Charlie"
-    fmt.Println("Updated user name:", userPtr.Name) // Charlie
-}
-```
 
 ---
 
