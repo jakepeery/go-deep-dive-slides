@@ -95,36 +95,29 @@
 - Note: If an existing API or application already returns pointers, it's best to follow that convention for consistency.
 
 ---
+## Going Deeper
 
-## Zero Values and nil
+- **Zero Values and nil**
+  - In Go, an uninitialized pointer has the zero value `nil`.
+  - Always check if a pointer is `nil` before dereferencing to avoid panics.
+  - Example:
+    ```go
+    var p *int // p is nil
+    if p is nil {
+        fmt.Println("Pointer is nil")
+    }
+    ```
 
-- In Go, an uninitialized pointer has the zero value `nil`.
-- Always check if a pointer is `nil` before dereferencing to avoid panics.
-- Example:
-  ```go
-  var p *int // p is nil
-  if p == nil {
-      fmt.Println("Pointer is nil")
-  }
-  ```
+- **Pointer Receivers vs Value Receivers**
+  - Methods can have pointer or value receivers.
+  - Use a pointer receiver if the method needs to modify the receiver or to avoid copying large structs.
+  - Value receivers are fine for small, immutable types.
+  - Go automatically takes the address or dereferences as needed when calling methods.
 
----
+- **Advanced: unsafe.Pointer**
+  - The `unsafe` package allows conversion between arbitrary pointer types.
+  - Use only when absolutely necessary; it breaks type safety and is not idiomatic Go.
 
-## Pointer Receivers vs Value Receivers
-
-- Methods can have pointer or value receivers.
-- Use a pointer receiver if the method needs to modify the receiver or to avoid copying large structs.
-- Value receivers are fine for small, immutable types.
-- Go automatically takes the address or dereferences as needed when calling methods.
-
----
-
-## Advanced: unsafe.Pointer
-
-- The `unsafe` package allows conversion between arbitrary pointer types.
-- Use only when absolutely necessary; it breaks type safety and is not idiomatic Go.
-
----
 
 ## Passing vs Returning Pointers: What's Idiomatic?
 
@@ -203,4 +196,5 @@ func NewUser(name string) *User {
 - [Effective Go: Pointers vs. Values](https://go.dev/doc/effective_go#pointers_vs_values)
 - [Go Blog: Go Slices: usage and internals](https://blog.golang.org/slices-intro)
 - [Go Blog: The Laws of Reflection](https://blog.golang.org/laws-of-reflection)
+
 
