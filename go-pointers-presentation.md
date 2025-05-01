@@ -141,9 +141,23 @@ func Update(p *User) {
     p.Name = "Jake"
 }
 
+func main() {
+    u := User{Name: "Alice"}
+    fmt.Println("Before Update:", u.Name) // Alice
+    Update(&u)
+    fmt.Println("After Update:", u.Name)  // Jake
+}
+
 // Return pointer for ownership or reuse
 func NewUser(name string) *User {
     return &User{Name: name}
+}
+
+func main() {
+    userPtr := NewUser("Bob")
+    fmt.Println("New user name:", userPtr.Name) // Bob
+    userPtr.Name = "Charlie"
+    fmt.Println("Updated user name:", userPtr.Name) // Charlie
 }
 ```
 
