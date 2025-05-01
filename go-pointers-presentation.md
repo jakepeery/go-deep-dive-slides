@@ -82,6 +82,17 @@
   }
   ```
   - In this example, calling `findEvenPointer(3)` returns `nil`, so dereferencing `*p` will cause a runtime panic: `panic: runtime error: invalid memory address or nil pointer dereference`.
+- Example: Always check for nil before dereferencing a pointer.
+  ```go
+  func main() {
+      p := findEvenPointer(3)
+      if p == nil {
+          fmt.Println("Pointer is nil, cannot dereference")
+      } else {
+          fmt.Println("Dereferenced value:", *p)
+      }
+  }
+  ```
 - Go has garbage collection, but pointers can still be tricky to debug.
 - Prefer passing pointers into functions rather than returning them:
   - Passing a pointer allows the caller to control the lifetime and ownership of the value, and makes it clear who is responsible for managing the data.
@@ -91,6 +102,33 @@
 
 ---
 
+## Passing vs Returning Pointers: What's Idiomatic?
+
+- In Go, prefer **passing pointers into functions** when you:
+  - Want to mutate the value
+  - Want to avoid copying large structs
+  - Want to share ownership across goroutines safely
+- Return pointers from functions when you:
+  - Are **creating and initializing** a new object
+  - Need to signal optionality (`nil`)
+  - Want the caller to manage the object lifecycle
+- Avoid returning pointers to primitives like `*int`, `*bool`, etc., unless required.
+- Returning pointers to local variables is **safe in Go** due to escape analysis, but it may confuse newcomers.
+- ⚠️ Avoid returning pointers just to “reduce allocations” unless performance profiling supports it.
+
+**Idiomatic summary:**
+```go
+// Pass pointer to mutate
+func Update(p *User) {
+    p.Name = "Jake"
+}
+
+// Return pointer for ownership or reuse
+func NewUser(name string) *User {
+    return &User{Name: name}
+}
+
+---
 ## Pointers vs References: Go, Java, JavaScript, and Python
 
 - **Go:** Explicit pointers for any type (except maps, slices, channels, interfaces, functions).
