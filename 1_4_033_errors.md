@@ -40,12 +40,6 @@ func processEvent(event events.Event) {
 
 ---
 
-## Platform vs. Application Engineering
-
-- **Platform engineering** focuses on building robust, reusable components and infrastructure. Defensive programming and comprehensive error handling are critical, as failures can impact many downstream applications.
-- **Application engineering** often involves using platform components and handling errors in the context of specific business logic. Here, it's important to surface errors in a way that's meaningful to the application and its users.
-
----
 
 ## When to Log vs. When to Pass Errors
 
