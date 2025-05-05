@@ -103,39 +103,17 @@ func main() {
 
 ---
 
-## Interface Pollution
+## Interface Pollution and Composition
+
 ```
-The bigger the interface, the weaker the abstraction. —Rob Pike**
+The bigger the interface, the weaker the abstraction. —Rob Pike
 ```
-"...interfaces are made to create abstractions. And the main caveat when programming meets abstractions is remembering that abstractions should be discovered, not created. What does this mean? It means we shouldn’t start creating abstractions in our code if there is no immediate reason to do so." - Teiva Harsanyi - 100 Go Mistakes and How to Avoid Them
 
-Interface pollution happens when an interface bloats with large sets of methods.  This makes the interface difficult to implement when types need to implement all the methods especially if the type doesn't actually need all the methods.  
+Interface pollution occurs when an interface grows too large, accumulating many methods. This makes it harder for types to implement the interface, especially if they don't need all the methods. Large interfaces reduce flexibility and weaken abstraction.
 
-### How to fix this issue
-**Interface Composition**
-Embedding interfaces into each other - Interface of interfaces - one interface that combines the effectiveness of multiple interfaces.  Especially useful when building additional types that need to extend beyond the original set of interfaces without finding all other instances that instantiate the interface.
+**How to avoid interface pollution? Use interface composition.**
 
-```go
-type Speaker interface {
-    Speak() string
-}
-
-type LegCount interface {
-    LegNum() int
-}
-
-type Animal interface {
-    Speaker
-    LegCount
-}
-```
-Interface Composition extends the abstraction so that additional methods can be used without needing to change the existing.  This can also lead to readability issues so documentation is critical and be careful not to overuse this functionality. (Be purposeful)
-
----
-
-### Interface Composition
-
-Interface composition is the practice of building new interfaces by combining existing, smaller interfaces. This allows you to create flexible abstractions and extend functionality without duplicating code.
+Interface composition is the practice of building new interfaces by combining smaller, focused interfaces. This encourages the creation of minimal, reusable abstractions and helps keep your code modular and maintainable.
 
 For example:
 ```go
@@ -155,14 +133,16 @@ type Animal interface {
 ```
 Any type that implements both `Speak()` and `LegNum()` will satisfy the `Animal` interface.
 
-**Why use interface composition?**
+**Benefits of interface composition:**
 - Encourages small, focused interfaces (the "interface segregation principle")
 - Makes code more modular and reusable
 - Allows you to extend interfaces as your application grows
 
-**When to use with caution:**
+**Use with caution:**
 - Over-composing interfaces can make code harder to understand
 - Document composed interfaces clearly to avoid confusion
+
+_Abstractions should be discovered, not created. Only compose interfaces when there is a clear need._
 
 ---
 
