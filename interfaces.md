@@ -109,11 +109,23 @@ func main() {
 The bigger the interface, the weaker the abstraction. —Rob Pike
 ```
 
+"...interfaces are made to create abstractions. And the main caveat when programming meets abstractions is remembering that abstractions should be discovered, not created. What does this mean? It means we shouldn’t start creating abstractions in our code if there is no immediate reason to do so."  
+— Teiva Harsanyi, 100 Go Mistakes and How to Avoid Them
+
 Interface pollution occurs when an interface grows too large, accumulating many methods. This makes it harder for types to implement the interface, especially if they don't need all the methods. Large interfaces reduce flexibility and weaken abstraction.
 
 ### How to avoid interface pollution? - Use interface composition. ###
 
 Interface composition is the practice of building new interfaces by combining smaller, focused interfaces. This encourages the creation of minimal, reusable abstractions and helps keep your code modular and maintainable.
+
+In Go, this is sometimes called creating an "interface of interfaces." Instead of listing all required methods again, you embed existing interfaces into a new interface. The new interface then requires all the methods of the embedded interfaces, so any type that implements all those methods satisfies the composed interface.
+
+This approach allows you to build more complex abstractions from simple, reusable pieces. It's widely used in Go's standard library (for example, `io.ReadWriter` combines `io.Reader` and `io.Writer`). By composing interfaces, you avoid duplication and keep your interfaces focused and easy to implement.
+
+**Key points:**
+- Interface composition lets you combine behaviors from multiple interfaces.
+- The resulting interface is satisfied by any type that implements all embedded interfaces' methods.
+- This keeps interfaces small, focused, and reusable, and helps prevent interface pollution.
 
 For example:
 ```go
