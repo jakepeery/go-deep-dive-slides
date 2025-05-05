@@ -1,4 +1,4 @@
-s# Core - Interfaces
+# Core - Interfaces
 ---
 ### What is an Interface type is Go
 **Tour of Go Interface Definition:  An interface type is defined as a set of method signatures.**
