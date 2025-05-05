@@ -111,7 +111,7 @@ The bigger the interface, the weaker the abstraction. —Rob Pike
 
 Interface pollution occurs when an interface grows too large, accumulating many methods. This makes it harder for types to implement the interface, especially if they don't need all the methods. Large interfaces reduce flexibility and weaken abstraction.
 
-### How to avoid interface pollution? Use interface composition. ###
+### How to avoid interface pollution? - Use interface composition. ###
 
 Interface composition is the practice of building new interfaces by combining smaller, focused interfaces. This encourages the creation of minimal, reusable abstractions and helps keep your code modular and maintainable.
 
