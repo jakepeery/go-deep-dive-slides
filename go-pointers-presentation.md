@@ -145,7 +145,6 @@
 | Large struct        | Avoids copying big data structures                          |
 | Optional result     | You can return `nil` to mean “nothing”                      |
 | Mutation needed     | Caller can modify the struct                                |
-| Shared ownership    | Struct may be reused or mutated by multiple parts           |
 | Consistency         | API conventions often use `*Type` consistently              |
 
 **Real-world examples:**
@@ -163,6 +162,7 @@
 
 - **Go:** Explicit pointers for any type (except maps, slices, channels, interfaces, functions).
   - Must use `&` and `*` to work with addresses and values.
+  - Unsafe package can provide more C-like memory access with increased risk. ("use as a last resort")
 - **Java:** All objects are accessed by reference, but no explicit pointer syntax.
   - Primitive types (int, float, etc.) are passed by value.
   - No pointer arithmetic or direct memory access.
